@@ -1,0 +1,65 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.container {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+}
+
+/* แผนผังอาคาร */
+.floor-plan {
+    display: flex;
+    gap: 10px;
+    height: 150px;
+    margin-bottom: 20px;
+}
+
+.room-light {
+    flex: 1;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+    font-weight: bold;
+    background-color: #333; /* ปิดไฟ */
+    color: white;
+}
+
+/* สถานะเมื่อเปิดไฟ */
+.room-light.on {
+    background-color: #ffeb3b;
+    color: #333;
+    box-shadow: 0 0 15px #ffeb3b;
+    border-color: #fbc02d;
+}
+
+.control-group {
+    margin: 15px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+button {
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    transition: 0.2s;
+}
+
+button:hover { background-color: #0056b3; }
