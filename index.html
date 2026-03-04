@@ -3,83 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Blueprint Pro</title>
+    <title>Easy Light Control</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="app-container">
+    <div class="container">
         <header>
-            <h1>MASTER BLUEPRINT CONTROL</h1>
-            <div class="system-status"><span class="pulse"></span> SYSTEM ONLINE | 8 TERMINALS</div>
+            <h1>LIGHT CONTROL PANEL</h1>
+            <p id="system-status">Connecting to Firebase...</p>
         </header>
 
-        <div class="main-layout">
-            <section class="blueprint-area">
-                <div class="blueprint-card">
-                    <div class="grid-layer"></div>
-                    
-                    <div class="room living-room" onclick="toggleLight('light1')">
-                        <span class="tag">LIVING AREA</span>
-                        <div class="light-node" id="node-light1"></div>
-                    </div>
+        <div class="blueprint-view">
+            <div class="building-map">
+                <div class="bulb" id="bulb-1">1</div>
+                <div class="bulb" id="bulb-2">2</div>
+                <div class="bulb" id="bulb-3">3</div>
+                <div class="bulb" id="bulb-4">4</div>
+                <div class="bulb" id="bulb-5">5</div>
+                <div class="bulb" id="bulb-6">6</div>
+                <div class="bulb" id="bulb-7">7</div>
+                <div class="bulb" id="bulb-8">8</div>
+            </div>
+        </div>
 
-                    <div class="center-wing">
-                        <div class="room kitchen" onclick="toggleLight('light2')">
-                            <span class="tag">KITCHEN</span>
-                            <div class="light-node" id="node-light2"></div>
-                        </div>
-                        <div class="room hallway" onclick="toggleLight('light3')">
-                            <span class="tag">HALLWAY</span>
-                            <div class="light-node" id="node-light3"></div>
-                        </div>
-                    </div>
+        <div class="button-grid" id="control-panel">
+            </div>
 
-                    <div class="right-wing">
-                        <div class="room bedroom-1" onclick="toggleLight('light4')">
-                            <span class="tag">BED 01</span>
-                            <div class="light-node" id="node-light4"></div>
-                        </div>
-                        <div class="room bedroom-2" onclick="toggleLight('light5')">
-                            <span class="tag">BED 02</span>
-                            <div class="light-node" id="node-light5"></div>
-                        </div>
-                        <div class="room bathroom" onclick="toggleLight('light6')">
-                            <span class="tag">BATH</span>
-                            <div class="light-node" id="node-light6"></div>
-                        </div>
-                    </div>
-
-                    <div class="room balcony">
-                        <span class="tag">BALCONY</span>
-                        <div class="light-node" id="node-light7" onclick="toggleLight('light7')"></div>
-                        <div class="light-node" id="node-light8" onclick="toggleLight('light8')"></div>
-                    </div>
-                </div>
-            </section>
-
-            <aside class="sidebar">
-                <div class="control-panel">
-                    <h3>DEVICE TERMINAL</h3>
-                    <div id="btn-grid" class="btn-grid">
-                        </div>
-                </div>
-
-                <div class="control-panel">
-                    <h3>SET SCHEDULE</h3>
-                    <div class="timer-box">
-                        <select id="select-room"></select>
-                        <input type="time" id="input-time">
-                        <button class="btn-primary" onclick="setTimer()">SET</button>
-                    </div>
-                </div>
-
-                <div class="control-panel history">
-                    <h3>ACTIVITY LOGS</h3>
-                    <ul id="log-list"></ul>
-                </div>
-            </aside>
+        <div class="history-section">
+            <h3>Recent Activity</h3>
+            <ul id="log-viewer"></ul>
         </div>
     </div>
+
     <script type="module" src="script.js"></script>
 </body>
 </html>
