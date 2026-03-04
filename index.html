@@ -10,19 +10,19 @@
     <div class="app-container">
         <header>
             <h1>BUILDING BLUEPRINT</h1>
-            <p>Real-time Lighting Control System</p>
+            <p>Smart Lighting Control System</p>
         </header>
 
         <div class="main-layout">
             <section class="blueprint-section">
                 <div class="blueprint-card">
                     <div class="grid-overlay"></div>
-                    <div class="room room-1" id="room1-area">
-                        <span class="room-label">ROOM 01</span>
+                    <div class="room room-1">
+                        <span class="room-label">ROOM 01 (Living)</span>
                         <div class="light-node" id="node-room1"></div>
                     </div>
-                    <div class="room room-2" id="room2-area">
-                        <span class="room-label">ROOM 02</span>
+                    <div class="room room-2">
+                        <span class="room-label">ROOM 02 (Bedroom)</span>
                         <div class="light-node" id="node-room2"></div>
                     </div>
                 </div>
@@ -49,19 +49,17 @@
                             <option value="room1">Room 01</option>
                             <option value="room2">Room 02</option>
                         </select>
-                        <button class="btn-add" onclick="setTimer()">SET</button>
+                        <button class="btn-set" onclick="setTimer()">SET</button>
                     </div>
                 </div>
 
                 <div class="card history-card">
                     <h3>HISTORY LOG</h3>
-                    <ul id="history-list">
-                        </ul>
+                    <ul id="history-list"></ul>
                 </div>
             </section>
         </div>
     </div>
-
     <script type="module" src="script.js"></script>
 </body>
 </html>
