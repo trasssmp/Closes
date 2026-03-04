@@ -3,16 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Blueprint V2</title>
+    <title>Master Blueprint Pro</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="app-container">
         <header>
-            <div class="header-content">
-                <h1>MASTER BLUEPRINT CONTROL</h1>
-                <div class="system-status"><span class="pulse"></span> SYSTEM ONLINE | 8 TERMINALS</div>
-            </div>
+            <h1>MASTER BLUEPRINT CONTROL</h1>
+            <div class="system-status"><span class="pulse"></span> SYSTEM ONLINE | 8 TERMINALS</div>
         </header>
 
         <div class="main-layout">
@@ -20,68 +18,66 @@
                 <div class="blueprint-card">
                     <div class="grid-layer"></div>
                     
-                    <div class="room r-living">
-                        <span class="room-tag">LIVING</span>
-                        <div class="light-node" id="node-light1" onclick="toggleLight('light1')"></div>
+                    <div class="room living-room" onclick="toggleLight('light1')">
+                        <span class="tag">LIVING AREA</span>
+                        <div class="light-node" id="node-light1"></div>
                     </div>
 
                     <div class="center-wing">
-                        <div class="room r-kitchen">
-                            <span class="room-tag">KITCHEN</span>
-                            <div class="light-node" id="node-light2" onclick="toggleLight('light2')"></div>
+                        <div class="room kitchen" onclick="toggleLight('light2')">
+                            <span class="tag">KITCHEN</span>
+                            <div class="light-node" id="node-light2"></div>
                         </div>
-                        <div class="room r-hallway">
-                            <span class="room-tag">HALLWAY</span>
-                            <div class="light-node" id="node-light3" onclick="toggleLight('light3')"></div>
+                        <div class="room hallway" onclick="toggleLight('light3')">
+                            <span class="tag">HALLWAY</span>
+                            <div class="light-node" id="node-light3"></div>
                         </div>
                     </div>
 
                     <div class="right-wing">
-                        <div class="room r-bed1">
-                            <span class="room-tag">BED 01</span>
-                            <div class="light-node" id="node-light4" onclick="toggleLight('light4')"></div>
+                        <div class="room bedroom-1" onclick="toggleLight('light4')">
+                            <span class="tag">BED 01</span>
+                            <div class="light-node" id="node-light4"></div>
                         </div>
-                        <div class="room r-bed2">
-                            <span class="room-tag">BED 02</span>
-                            <div class="light-node" id="node-light5" onclick="toggleLight('light5')"></div>
+                        <div class="room bedroom-2" onclick="toggleLight('light5')">
+                            <span class="tag">BED 02</span>
+                            <div class="light-node" id="node-light5"></div>
                         </div>
-                        <div class="room r-bath">
-                            <span class="room-tag">BATH</span>
-                            <div class="light-node" id="node-light6" onclick="toggleLight('light6')"></div>
+                        <div class="room bathroom" onclick="toggleLight('light6')">
+                            <span class="tag">BATH</span>
+                            <div class="light-node" id="node-light6"></div>
                         </div>
                     </div>
 
-                    <div class="room r-balcony">
-                        <span class="room-tag vertical">BALCONY</span>
-                        <div class="balcony-lights">
-                            <div class="light-node" id="node-light7" onclick="toggleLight('light7')"></div>
-                            <div class="light-node" id="node-light8" onclick="toggleLight('light8')"></div>
-                        </div>
+                    <div class="room balcony">
+                        <span class="tag">BALCONY</span>
+                        <div class="light-node" id="node-light7" onclick="toggleLight('light7')"></div>
+                        <div class="light-node" id="node-light8" onclick="toggleLight('light8')"></div>
                     </div>
                 </div>
             </section>
 
-            <section class="sidebar">
-                <div class="glass-card">
-                    <h3><i class="icon"></i> TERMINAL CONTROL</h3>
-                    <div id="control-grid" class="control-grid">
+            <aside class="sidebar">
+                <div class="control-panel">
+                    <h3>DEVICE TERMINAL</h3>
+                    <div id="btn-grid" class="btn-grid">
                         </div>
                 </div>
 
-                <div class="glass-card">
-                    <h3><i class="icon"></i> AUTOMATION</h3>
-                    <div class="timer-flex">
-                        <select id="schedule-room"></select>
-                        <input type="time" id="schedule-time">
-                        <button class="btn-action" onclick="setTimer()">SCHEDULE</button>
+                <div class="control-panel">
+                    <h3>SET SCHEDULE</h3>
+                    <div class="timer-box">
+                        <select id="select-room"></select>
+                        <input type="time" id="input-time">
+                        <button class="btn-primary" onclick="setTimer()">SET</button>
                     </div>
                 </div>
 
-                <div class="glass-card log-container">
-                    <h3><i class="icon"></i> ACTIVITY LOGS</h3>
-                    <ul id="history-list"></ul>
+                <div class="control-panel history">
+                    <h3>ACTIVITY LOGS</h3>
+                    <ul id="log-list"></ul>
                 </div>
-            </section>
+            </aside>
         </div>
     </div>
     <script type="module" src="script.js"></script>
