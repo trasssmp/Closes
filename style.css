@@ -1,83 +1,85 @@
 :root {
-    --bg-color: #0a192f;
-    --blueprint-blue: #112240;
-    --line-color: rgba(100, 255, 218, 0.15);
+    --bg-color: #050a14;
+    --blueprint-blue: #0a192f;
+    --line-color: rgba(100, 255, 218, 0.1);
     --accent-color: #64ffda;
     --light-on: #fbff00;
 }
 
 body {
     background-color: var(--bg-color);
-    color: #ccd6f6;
-    font-family: 'Segoe UI', Tahoma, sans-serif;
-    margin: 0; padding: 20px;
+    color: #8892b0;
+    font-family: 'Consolas', monospace;
+    margin: 0; padding: 15px;
 }
 
-.app-container { max-width: 1100px; margin: auto; }
+.app-container { max-width: 1400px; margin: auto; }
 
-header { text-align: center; border-bottom: 1px solid var(--accent-color); margin-bottom: 25px; }
-header h1 { color: var(--accent-color); letter-spacing: 2px; margin-bottom: 5px; }
+header { border-bottom: 2px solid var(--accent-color); margin-bottom: 20px; padding-bottom: 10px; }
+header h1 { color: var(--accent-color); margin: 0; font-size: 1.5rem; }
+.status-bar { font-size: 10px; color: #444; }
 
-.main-layout { display: grid; grid-template-columns: 1fr 320px; gap: 20px; }
+.main-layout { display: grid; grid-template-columns: 1fr 350px; gap: 20px; }
 
-/* Blueprint Card */
+/* Blueprint Layout */
 .blueprint-card {
     background-color: var(--blueprint-blue);
-    height: 400px;
+    height: 600px;
     position: relative;
-    border: 2px solid var(--accent-color);
-    display: flex; gap: 2px; padding: 20px;
+    border: 1px solid var(--accent-color);
+    display: flex; gap: 10px; padding: 20px;
+    box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
 }
 
 .grid-overlay {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background-image: linear-gradient(var(--line-color) 1px, transparent 1px),
                       linear-gradient(90deg, var(--line-color) 1px, transparent 1px);
-    background-size: 25px 25px;
+    background-size: 40px 40px;
     pointer-events: none;
 }
 
 .room {
-    flex: 1; border: 2px solid var(--accent-color);
+    border: 2px solid var(--accent-color);
     position: relative; display: flex; align-items: center; justify-content: center;
-    background: rgba(100, 255, 218, 0.05);
+    background: rgba(100, 255, 218, 0.02);
 }
 
-.room-label { position: absolute; top: 10px; left: 10px; font-size: 12px; color: var(--accent-color); }
+.label { position: absolute; top: 5px; left: 5px; font-size: 10px; color: var(--accent-color); opacity: 0.7; }
 
+/* กำหนดขนาดแต่ละโซน */
+.r-living { flex: 2; height: 100%; }
+.mid-section { flex: 1.5; display: flex; flex-direction: column; gap: 10px; }
+.r-kitchen { flex: 1; } .r-hallway { flex: 2; }
+.right-section { flex: 1.5; display: flex; flex-direction: column; gap: 10px; }
+.r-bed1, .r-bed2 { flex: 2; } .r-bath { flex: 1; }
+.r-balcony { width: 60px; height: 100%; writing-mode: vertical-rl; }
+
+/* หลอดไฟ */
 .light-node {
-    width: 30px; height: 30px; border-radius: 50%;
-    background-color: #333; transition: 0.4s;
-    border: 2px solid #555;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: #111; border: 2px solid #333; transition: 0.3s;
 }
 
 .light-node.on {
-    background-color: var(--light-on);
-    box-shadow: 0 0 30px var(--light-on);
+    background: var(--light-on);
+    box-shadow: 0 0 20px var(--light-on), 0 0 40px var(--light-on);
     border-color: #fff;
 }
 
 /* Control UI */
-.card {
-    background: #172a45; padding: 15px; border-radius: 8px; margin-bottom: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-}
+.card { background: #112240; padding: 15px; border-radius: 4px; margin-bottom: 15px; border: 1px solid #233554; }
+h3 { color: var(--accent-color); margin-top: 0; font-size: 12px; border-bottom: 1px solid #233554; padding-bottom: 5px; }
 
-h3 { color: var(--accent-color); margin-top: 0; font-size: 14px; }
+.scroll-box { max-height: 300px; overflow-y: auto; }
 
-.ctrl-row { display: flex; justify-content: space-between; align-items: center; margin: 10px 0; }
-
+.ctrl-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #172a45; }
 .btn-toggle {
     background: transparent; border: 1px solid var(--accent-color);
-    color: var(--accent-color); padding: 8px 15px; cursor: pointer; border-radius: 4px;
+    color: var(--accent-color); padding: 4px 12px; cursor: pointer; font-size: 11px;
 }
+.btn-toggle.active { background: var(--accent-color); color: var(--bg-color); }
 
-.btn-toggle.active { background: var(--accent-color); color: var(--bg-color); font-weight: bold; }
+.history-card { height: 150px; overflow-y: auto; font-size: 11px; }
 
-.btn-set { background: var(--accent-color); border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer; }
-
-.history-card { max-height: 200px; overflow-y: auto; }
-#history-list { list-style: none; padding: 0; font-size: 12px; }
-#history-list li { border-bottom: 1px solid #233554; padding: 5px 0; color: #8892b0; }
-
-@media (max-width: 768px) { .main-layout { grid-template-columns: 1fr; } }
+@media (max-width: 900px) { .main-layout { grid-template-columns: 1fr; } .blueprint-card { height: 400px; } }
