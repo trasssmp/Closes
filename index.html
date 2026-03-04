@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Building Control</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Building Light Control</h1>
+
+        <div class="floor-plan">
+            <div id="room1-indicator" class="room-light">Room 1</div>
+            <div id="room2-indicator" class="room-light">Room 2</div>
+        </div>
+
+        <hr>
+
+        <div class="controls">
+            <div class="control-group">
+                <span>ห้องนั่งเล่น (Room 1): </span>
+                <button id="btn-room1" onclick="toggleLight('room1')">Loading...</button>
+            </div>
+            <div class="control-group">
+                <span>ห้องนอน (Room 2): </span>
+                <button id="btn-room2" onclick="toggleLight('room2')">Loading...</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
