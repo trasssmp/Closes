@@ -14,18 +14,42 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-let currentStatus = { room1: false, room2: false };
+// รายชื่อไฟทั้งหมด
+const lightDevices = [
+    { id: 'light1', name: 'Living Room' },
+    { id: 'light2', name: 'Kitchen' },
+    { id: 'light3', name: 'Hallway' },
+    { id: 'light4', name: 'Bedroom 01' },
+    { id: 'light5', name: 'Bedroom 02' },
+    { id: 'light6', name: 'Bathroom' },
+    { id: 'light7', name: 'Balcony A' },
+    { id: 'light8', name: 'Balcony B' }
+];
 
-// 1. ติดตามสถานะไฟและอัปเดต Blueprint
-const roomIds = ['room1', 'room2'];
-roomIds.forEach(room => {
-    onValue(ref(db, `lights/${room}`), (snapshot) => {
-        const isOn = snapshot.val();
-        currentStatus[room] = isOn;
+const statusStore = {};
+
+// สร้างปุ่มควบคุมและตัวเลือกตั้งเวลาอัตโนมัติ
+const controlList = document.getElementById('control-list');
+const scheduleSelect = document.getElementById('schedule-room');
+
+lightDevices.forEach(dev => {
+    // สร้างปุ่มในเมนู Control
+    controlList.innerHTML += `
+        <div class="ctrl-item">
+            <span>${dev.name}</span>
+            <button class="btn-toggle" id="btn-${dev.id}" onclick="toggleLight('${dev.id}')">OFF</button>
+        </div>
+    `;
+    // เพิ่มตัวเลือกในเมนูตั้งเวลา
+    scheduleSelect.innerHTML += `<option value="${dev.id}">${dev.name}</option>`;
+
+    // เชื่อมต่อ Firebase Real-time
+    onValue(ref(db, `building/lights/${dev.id}`), (snapshot) => {
+        const isOn = snapshot.val() || false;
+        statusStore[dev.id] = isOn;
         
-        // อัปเดตจุดไฟในแผนผัง
-        const node = document.getElementById(`node-${room}`);
-        const btn = document.getElementById(`btn-${room}`);
+        const node = document.getElementById(`node-${dev.id}`);
+        const btn = document.getElementById(`btn-${dev.id}`);
         
         if(isOn) {
             node.classList.add('on');
@@ -39,49 +63,41 @@ roomIds.forEach(room => {
     });
 });
 
-// 2. ฟังก์ชันเปิดปิด และบันทึกประวัติ (History)
-window.toggleLight = function(room) {
-    const newStatus = !currentStatus[room];
-    set(ref(db, `lights/${room}`), newStatus);
+// ฟังก์ชันเปิดปิด
+window.toggleLight = function(id) {
+    const nextStatus = !statusStore[id];
+    set(ref(db, `building/lights/${id}`), nextStatus);
     
-    // บันทึกลง History ใน Firebase
-    push(ref(db, 'history'), {
-        room: room,
-        status: newStatus ? "ON" : "OFF",
-        timestamp: serverTimestamp()
+    // บันทึก Log
+    push(ref(db, 'building/logs'), {
+        device: id,
+        action: nextStatus ? "OPENED" : "CLOSED",
+        time: serverTimestamp()
     });
 };
 
-// 3. ดึงประวัติย้อนหลังมาแสดง
-const historyRef = query(ref(db, 'history'), limitToLast(10));
-onValue(historyRef, (snapshot) => {
-    const list = document.getElementById('history-list');
-    list.innerHTML = "";
-    snapshot.forEach(child => {
-        const data = child.val();
-        const time = data.timestamp ? new Date(data.timestamp).toLocaleTimeString() : "...";
-        const li = document.createElement('li');
-        li.innerText = `[${time}] ${data.room.toUpperCase()}: ${data.status}`;
-        list.prepend(li); // เอาอันล่าสุดขึ้นบน
+// ดึง Log มาแสดง
+onValue(query(ref(db, 'building/logs'), limitToLast(8)), (snapshot) => {
+    const historyList = document.getElementById('history-list');
+    historyList.innerHTML = "";
+    snapshot.forEach(doc => {
+        const log = doc.val();
+        const date = log.time ? new Date(log.time).toLocaleTimeString() : "";
+        historyList.innerHTML = `<li>[${date}] ${log.device}: ${log.action}</li>` + historyList.innerHTML;
     });
 });
 
-// 4. ระบบตั้งเวลา (Simple Timer)
+// ระบบตั้งเวลา
 window.setTimer = function() {
-    const timeVal = document.getElementById('schedule-time').value;
-    const room = document.getElementById('schedule-room').value;
+    const time = document.getElementById('schedule-time').value;
+    const devId = scheduleSelect.value;
+    if(!time) return alert("Please select time");
     
-    if(!timeVal) return alert("กรุณาเลือกเวลา");
-
-    alert(`ตั้งเวลาให้ ${room} ทำงานตอน ${timeVal}`);
-
-    // เช็คเวลาทุกๆ 1 นาที (Client-side Timer)
+    alert(`Timer Set: ${devId} at ${time}`);
+    
     setInterval(() => {
         const now = new Date();
-        const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-        
-        if(currentTime === timeVal) {
-            set(ref(db, `lights/${room}`), true); // สั่งเปิดไฟเมื่อถึงเวลา
-        }
+        const nowStr = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+        if(nowStr === time) set(ref(db, `building/lights/${devId}`), true);
     }, 60000);
 };
