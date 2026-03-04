@@ -14,85 +14,78 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-const lights = [
+const devices = [
     { id: 'light1', name: 'LIVING' }, { id: 'light2', name: 'KITCHEN' },
     { id: 'light3', name: 'HALLWAY' }, { id: 'light4', name: 'BED 01' },
     { id: 'light5', name: 'BED 02' }, { id: 'light6', name: 'BATH' },
-    { id: 'light7', name: 'BALCONY L' }, { id: 'light8', name: 'BALCONY R' }
+    { id: 'light7', name: 'BALCONY 1' }, { id: 'light8', name: 'BALCONY 2' }
 ];
 
-let lightStates = {};
+let deviceStatus = {};
 
-// สร้าง UI ปุ่มกดและตัวเลือกเวลา
-const controlGrid = document.getElementById('control-grid');
-const scheduleSelect = document.getElementById('schedule-room');
+const btnGrid = document.getElementById('btn-grid');
+const selectRoom = document.getElementById('select-room');
 
-lights.forEach(light => {
-    // สร้างปุ่ม Dashboard
-    controlGrid.innerHTML += `
-        <button class="ctrl-btn" id="btn-${light.id}" onclick="toggleLight('${light.id}')">
-            <span class="name">${light.name}</span>
-            <span class="status-text" id="status-${light.id}">OFFLINE</span>
+// สร้างปุ่มและตัวเลือก
+devices.forEach(dev => {
+    btnGrid.innerHTML += `
+        <button class="ctrl-btn" id="btn-${dev.id}" onclick="toggleLight('${dev.id}')">
+            ${dev.name}<br><span id="txt-${dev.id}">OFFLINE</span>
         </button>
     `;
-    scheduleSelect.innerHTML += `<option value="${light.id}">${light.name}</option>`;
+    selectRoom.innerHTML += `<option value="${dev.id}">${dev.name}</option>`;
 
-    // ฟังค่าจาก Firebase
-    onValue(ref(db, `building/lights/${light.id}`), (snap) => {
+    // รับค่าจาก Firebase
+    onValue(ref(db, `building/lights/${dev.id}`), (snap) => {
         const isOn = snap.val() || false;
-        lightStates[light.id] = isOn;
+        deviceStatus[dev.id] = isOn;
         
-        const node = document.getElementById(`node-${light.id}`);
-        const btn = document.getElementById(`btn-${light.id}`);
-        const statusText = document.getElementById(`status-${light.id}`);
+        const node = document.getElementById(`node-${dev.id}`);
+        const btn = document.getElementById(`btn-${dev.id}`);
+        const txt = document.getElementById(`txt-${dev.id}`);
 
-        if (isOn) {
-            node.classList.add('on');
-            btn.classList.add('active');
-            statusText.innerText = "● ACTIVE";
+        if(isOn) {
+            node?.classList.add('on');
+            btn?.classList.add('active');
+            if(txt) txt.innerText = "● ON";
         } else {
-            node.classList.remove('on');
-            btn.classList.remove('active');
-            statusText.innerText = "○ INACTIVE";
+            node?.classList.remove('on');
+            btn?.classList.remove('active');
+            if(txt) txt.innerText = "○ OFF";
         }
     });
 });
 
-// ฟังก์ชันเปิด-ปิด
 window.toggleLight = function(id) {
-    const newState = !lightStates[id];
+    const newState = !deviceStatus[id];
     set(ref(db, `building/lights/${id}`), newState);
     
-    // บันทึกประวัติ
     push(ref(db, 'building/logs'), {
-        room: id,
-        state: newState ? 'OPEN' : 'CLOSE',
+        device: id,
+        state: newState ? 'ON' : 'OFF',
         time: serverTimestamp()
     });
 };
 
-// ดึงประวัติ 10 รายการล่าสุด
 onValue(query(ref(db, 'building/logs'), limitToLast(10)), (snap) => {
-    const list = document.getElementById('history-list');
+    const list = document.getElementById('log-list');
     list.innerHTML = "";
     snap.forEach(child => {
         const log = child.val();
-        const timeStr = log.time ? new Date(log.time).toLocaleTimeString() : "...";
-        list.innerHTML = `<li>[${timeStr}] ${log.room.toUpperCase()} switched to ${log.state}</li>` + list.innerHTML;
+        const t = log.time ? new Date(log.time).toLocaleTimeString() : "";
+        list.innerHTML = `<li>[${t}] ${log.device} -> ${log.state}</li>` + list.innerHTML;
     });
 });
 
-// ระบบตั้งเวลา
 window.setTimer = function() {
-    const time = document.getElementById('schedule-time').value;
-    const room = scheduleSelect.value;
-    if(!time) return alert("Please select time!");
-
-    alert(`System: Timer set for ${room} at ${time}`);
-
+    const time = document.getElementById('input-time').value;
+    const id = selectRoom.value;
+    if(!time) return alert("Select Time!");
+    alert(`Timer set for ${id} at ${time}`);
     setInterval(() => {
         const now = new Date();
-        const current = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-        if(current === time) set(ref(db, `building/lights/${room}`), true);
+        if(`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}` === time) {
+            set(ref(db, `building/lights/${id}`), true);
+        }
     }, 60000);
 };
