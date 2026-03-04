@@ -1,85 +1,98 @@
 :root {
-    --bg-color: #050a14;
-    --blueprint-blue: #0a192f;
-    --line-color: rgba(100, 255, 218, 0.1);
-    --accent-color: #64ffda;
-    --light-on: #fbff00;
+    --bg-dark: #050a14;
+    --card-bg: rgba(16, 33, 64, 0.8);
+    --neon-cyan: #00f2ff;
+    --neon-yellow: #f9ff00;
+    --text-dim: #94a3b8;
 }
 
 body {
-    background-color: var(--bg-color);
-    color: #8892b0;
-    font-family: 'Consolas', monospace;
+    background-color: var(--bg-dark);
+    color: #e2e8f0;
+    font-family: 'Segoe UI', Roboto, sans-serif;
     margin: 0; padding: 15px;
+    overflow-x: hidden;
 }
 
 .app-container { max-width: 1400px; margin: auto; }
 
-header { border-bottom: 2px solid var(--accent-color); margin-bottom: 20px; padding-bottom: 10px; }
-header h1 { color: var(--accent-color); margin: 0; font-size: 1.5rem; }
-.status-bar { font-size: 10px; color: #444; }
+header { padding: 10px 0; border-bottom: 1px solid rgba(0, 242, 255, 0.3); margin-bottom: 20px; }
+h1 { font-size: 1.4rem; color: var(--neon-cyan); text-shadow: 0 0 10px rgba(0,242,255,0.5); margin: 0; }
+.system-status { font-size: 10px; color: var(--text-dim); margin-top: 5px; }
 
-.main-layout { display: grid; grid-template-columns: 1fr 350px; gap: 20px; }
+/* แอนิเมชันจุดสีแดงที่สถานะ */
+.pulse {
+    display: inline-block; width: 8px; height: 8px; background: #ff4757; border-radius: 50%;
+    margin-right: 5px; animation: blink 1.5s infinite;
+}
+@keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 
-/* Blueprint Layout */
+.main-layout { display: grid; grid-template-columns: 1fr 380px; gap: 20px; }
+
+/* Blueprint Design */
 .blueprint-card {
-    background-color: var(--blueprint-blue);
-    height: 600px;
-    position: relative;
-    border: 1px solid var(--accent-color);
-    display: flex; gap: 10px; padding: 20px;
-    box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
+    background: #0a192f; height: 650px; position: relative;
+    border: 1px solid var(--neon-cyan); border-radius: 4px;
+    display: flex; padding: 25px; gap: 15px;
 }
 
-.grid-overlay {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background-image: linear-gradient(var(--line-color) 1px, transparent 1px),
-                      linear-gradient(90deg, var(--line-color) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none;
+.grid-layer {
+    position: absolute; inset: 0; pointer-events: none;
+    background-image: linear-gradient(rgba(0,242,255,0.05) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(0,242,255,0.05) 1px, transparent 1px);
+    background-size: 30px 30px;
 }
 
 .room {
-    border: 2px solid var(--accent-color);
-    position: relative; display: flex; align-items: center; justify-content: center;
-    background: rgba(100, 255, 218, 0.02);
+    border: 1px solid var(--neon-cyan); position: relative;
+    background: rgba(0, 242, 255, 0.02); display: flex; align-items: center; justify-content: center;
 }
 
-.label { position: absolute; top: 5px; left: 5px; font-size: 10px; color: var(--accent-color); opacity: 0.7; }
+.room-tag { position: absolute; top: 5px; left: 8px; font-size: 11px; color: var(--neon-cyan); font-weight: bold; }
 
-/* กำหนดขนาดแต่ละโซน */
-.r-living { flex: 2; height: 100%; }
-.mid-section { flex: 1.5; display: flex; flex-direction: column; gap: 10px; }
-.r-kitchen { flex: 1; } .r-hallway { flex: 2; }
-.right-section { flex: 1.5; display: flex; flex-direction: column; gap: 10px; }
-.r-bed1, .r-bed2 { flex: 2; } .r-bath { flex: 1; }
-.r-balcony { width: 60px; height: 100%; writing-mode: vertical-rl; }
+/* ขยายห้องให้เต็มพื้นที่ */
+.r-living { flex: 2; }
+.center-wing { flex: 1.5; display: flex; flex-direction: column; gap: 15px; }
+.r-kitchen { flex: 1.2; } .r-hallway { flex: 1.8; }
+.right-wing { flex: 1.5; display: flex; flex-direction: column; gap: 15px; }
+.r-bed1, .r-bed2 { flex: 1.5; } .r-bath { flex: 1; }
+.r-balcony { width: 80px; } .balcony-lights { display: flex; flex-direction: column; gap: 100px; }
 
-/* หลอดไฟ */
+/* Interactive Light Node */
 .light-node {
-    width: 20px; height: 20px; border-radius: 50%;
-    background: #111; border: 2px solid #333; transition: 0.3s;
+    width: 25px; height: 25px; border-radius: 50%; background: #1a202c;
+    border: 2px solid #4a5568; cursor: pointer; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 10;
 }
-
+.light-node:hover { transform: scale(1.2); border-color: white; }
 .light-node.on {
-    background: var(--light-on);
-    box-shadow: 0 0 20px var(--light-on), 0 0 40px var(--light-on);
-    border-color: #fff;
+    background: var(--neon-yellow); border-color: white;
+    box-shadow: 0 0 20px var(--neon-yellow), 0 0 40px var(--neon-yellow);
 }
 
-/* Control UI */
-.card { background: #112240; padding: 15px; border-radius: 4px; margin-bottom: 15px; border: 1px solid #233554; }
-h3 { color: var(--accent-color); margin-top: 0; font-size: 12px; border-bottom: 1px solid #233554; padding-bottom: 5px; }
-
-.scroll-box { max-height: 300px; overflow-y: auto; }
-
-.ctrl-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #172a45; }
-.btn-toggle {
-    background: transparent; border: 1px solid var(--accent-color);
-    color: var(--accent-color); padding: 4px 12px; cursor: pointer; font-size: 11px;
+/* Sidebar Cards */
+.glass-card {
+    background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1);
+    padding: 18px; border-radius: 12px; margin-bottom: 20px;
 }
-.btn-toggle.active { background: var(--accent-color); color: var(--bg-color); }
+h3 { font-size: 13px; color: var(--neon-cyan); margin-top: 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
 
-.history-card { height: 150px; overflow-y: auto; font-size: 11px; }
+.control-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.ctrl-btn {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    color: white; padding: 12px; border-radius: 8px; cursor: pointer; text-align: left;
+    display: flex; flex-direction: column; gap: 5px; transition: 0.3s;
+}
+.ctrl-btn.active { border-color: var(--neon-yellow); background: rgba(249, 255, 0, 0.1); }
+.ctrl-btn .status-text { font-size: 10px; opacity: 0.6; }
 
-@media (max-width: 900px) { .main-layout { grid-template-columns: 1fr; } .blueprint-card { height: 400px; } }
+.btn-action {
+    background: var(--neon-cyan); color: black; border: none; padding: 8px 15px;
+    border-radius: 4px; font-weight: bold; cursor: pointer;
+}
+
+.log-container { height: 180px; overflow-y: auto; font-size: 11px; }
+#history-list { list-style: none; padding: 0; }
+#history-list li { padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05); color: #cbd5e1; }
+
+@media (max-width: 1000px) { .main-layout { grid-template-columns: 1fr; } .blueprint-card { height: 450px; } }
