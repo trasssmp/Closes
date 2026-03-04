@@ -1,93 +1,85 @@
-:root {
-    --cyan: #00f2ff;
-    --yellow: #f9ff00;
-    --bg: #050a14;
-    --panel: #112240;
-}
-
 body {
-    background: var(--bg);
-    color: #e2e8f0;
-    font-family: 'Segoe UI', sans-serif;
-    margin: 0; padding: 20px;
+    background-color: #1a202c;
+    color: white;
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
 }
 
-.app-container { max-width: 1400px; margin: auto; }
-header { border-bottom: 1px solid var(--cyan); margin-bottom: 20px; padding-bottom: 10px; }
-h1 { color: var(--cyan); text-shadow: 0 0 10px rgba(0,242,255,0.5); }
-
-.main-layout { display: grid; grid-template-columns: 1fr 350px; gap: 20px; }
-
-/* Blueprint Layout */
-.blueprint-card {
-    background: #0a192f;
-    height: 600px;
-    border: 2px solid var(--cyan);
-    display: flex; padding: 20px; gap: 15px;
-    position: relative;
+.container {
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
 }
 
-.grid-layer {
-    position: absolute; inset: 0; pointer-events: none;
-    background-image: linear-gradient(rgba(0,242,255,0.05) 1px, transparent 1px),
-                      linear-gradient(90deg, rgba(0,242,255,0.05) 1px, transparent 1px);
-    background-size: 30px 30px;
+/* แผนผังจำลอง */
+.building-map {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    background: #2d3748;
+    padding: 30px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+    border: 2px solid #4a5568;
 }
 
-.room {
-    border: 2px solid var(--cyan);
-    background: rgba(0, 242, 255, 0.03);
-    position: relative;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer; transition: 0.3s;
+.bulb {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #4a5568;
+    line-height: 50px;
+    font-weight: bold;
+    transition: 0.3s;
+    margin: auto;
 }
 
-.room:hover { background: rgba(0, 242, 255, 0.1); }
-.tag { position: absolute; top: 5px; left: 8px; font-size: 11px; color: var(--cyan); font-weight: bold; }
-
-/* แบ่งพื้นที่ห้อง */
-.living-room { flex: 2; }
-.center-wing { flex: 1.5; display: flex; flex-direction: column; gap: 15px; }
-.kitchen { flex: 1; } .hallway { flex: 2; }
-.right-wing { flex: 1.5; display: flex; flex-direction: column; gap: 15px; }
-.bedroom-1, .bedroom-2 { flex: 1.5; } .bathroom { flex: 1; }
-.balcony { width: 80px; flex-direction: column; gap: 50px; }
-
-/* หลอดไฟ */
-.light-node {
-    width: 25px; height: 25px; border-radius: 50%;
-    background: #1a202c; border: 2px solid #4a5568;
-    transition: 0.4s;
+.bulb.on {
+    background: #f6e05e;
+    color: #000;
+    box-shadow: 0 0 20px #f6e05e;
 }
 
-.light-node.on {
-    background: var(--yellow);
-    box-shadow: 0 0 20px var(--yellow), 0 0 40px var(--yellow);
-    border-color: #fff;
+/* แผงปุ่มกด */
+.button-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
 }
 
-/* Sidebar & Buttons */
-.control-panel {
-    background: var(--panel); border: 1px solid #233554;
-    padding: 15px; border-radius: 8px; margin-bottom: 15px;
+.control-item {
+    background: #2d3748;
+    padding: 15px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-h3 { font-size: 12px; color: var(--cyan); margin-bottom: 10px; border-bottom: 1px solid #233554; padding-bottom: 5px; }
-
-.btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-.ctrl-btn {
-    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-    color: white; padding: 10px; border-radius: 5px; cursor: pointer;
-    font-size: 11px; text-align: left; transition: 0.3s;
+.btn-group {
+    display: flex;
+    gap: 5px;
 }
 
-.ctrl-btn.active { border-color: var(--yellow); background: rgba(249, 255, 0, 0.1); }
+button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s;
+}
 
-.timer-box { display: flex; flex-direction: column; gap: 8px; }
-.btn-primary { background: var(--cyan); border: none; padding: 8px; font-weight: bold; cursor: pointer; }
+.btn-on { background-color: #48bb78; color: white; }
+.btn-off { background-color: #f56565; color: white; }
+button:active { transform: scale(0.95); opacity: 0.8; }
 
-.history { height: 200px; overflow-y: auto; }
-#log-list { list-style: none; padding: 0; font-size: 11px; color: #8892b0; }
-
-@media (max-width: 1000px) { .main-layout { grid-template-columns: 1fr; } }
+.history-section {
+    margin-top: 30px;
+    text-align: left;
+    font-size: 14px;
+    color: #a0aec0;
+}
