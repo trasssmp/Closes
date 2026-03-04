@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, onValue, set, push, serverTimestamp, query, limitToLast } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getDatabase, ref, onValue, set, push, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDz-6cx4lpJQ5e1fE_bt-9HYZCFiDsZvZ4",
@@ -14,78 +14,48 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-const devices = [
-    { id: 'light1', name: 'LIVING' }, { id: 'light2', name: 'KITCHEN' },
-    { id: 'light3', name: 'HALLWAY' }, { id: 'light4', name: 'BED 01' },
-    { id: 'light5', name: 'BED 02' }, { id: 'light6', name: 'BATH' },
-    { id: 'light7', name: 'BALCONY 1' }, { id: 'light8', name: 'BALCONY 2' }
-];
+// รายชื่อหลอดไฟ 1-8
+const lights = [1, 2, 3, 4, 5, 6, 7, 8];
+const panel = document.getElementById('control-panel');
 
-let deviceStatus = {};
-
-const btnGrid = document.getElementById('btn-grid');
-const selectRoom = document.getElementById('select-room');
-
-// สร้างปุ่มและตัวเลือก
-devices.forEach(dev => {
-    btnGrid.innerHTML += `
-        <button class="ctrl-btn" id="btn-${dev.id}" onclick="toggleLight('${dev.id}')">
-            ${dev.name}<br><span id="txt-${dev.id}">OFFLINE</span>
-        </button>
+// 1. สร้างปุ่มกด 8 ชุด
+lights.forEach(num => {
+    panel.innerHTML += `
+        <div class="control-item">
+            <span>Light No. ${num}</span>
+            <div class="btn-group">
+                <button class="btn-on" onclick="updateLight(${num}, true)">ON</button>
+                <button class="btn-off" onclick="updateLight(${num}, false)">OFF</button>
+            </div>
+        </div>
     `;
-    selectRoom.innerHTML += `<option value="${dev.id}">${dev.name}</option>`;
 
-    // รับค่าจาก Firebase
-    onValue(ref(db, `building/lights/${dev.id}`), (snap) => {
-        const isOn = snap.val() || false;
-        deviceStatus[dev.id] = isOn;
-        
-        const node = document.getElementById(`node-${dev.id}`);
-        const btn = document.getElementById(`btn-${dev.id}`);
-        const txt = document.getElementById(`txt-${dev.id}`);
-
-        if(isOn) {
-            node?.classList.add('on');
-            btn?.classList.add('active');
-            if(txt) txt.innerText = "● ON";
+    // 2. ฟังสถานะจาก Firebase มาเปลี่ยนสีวงกลมในผัง
+    onValue(ref(db, `lights/unit${num}`), (snapshot) => {
+        const status = snapshot.val();
+        const bulb = document.getElementById(`bulb-${num}`);
+        if (status === true) {
+            bulb.classList.add('on');
         } else {
-            node?.classList.remove('on');
-            btn?.classList.remove('active');
-            if(txt) txt.innerText = "○ OFF";
+            bulb.classList.remove('on');
         }
     });
 });
 
-window.toggleLight = function(id) {
-    const newState = !deviceStatus[id];
-    set(ref(db, `building/lights/${id}`), newState);
+// 3. ฟังก์ชันส่งค่าไป Firebase
+window.updateLight = function(id, state) {
+    set(ref(db, `lights/unit${id}`), state);
     
-    push(ref(db, 'building/logs'), {
-        device: id,
-        state: newState ? 'ON' : 'OFF',
+    // บันทึกประวัติ
+    push(ref(db, 'logs'), {
+        device: `Unit ${id}`,
+        action: state ? 'OPENED' : 'CLOSED',
         time: serverTimestamp()
     });
 };
 
-onValue(query(ref(db, 'building/logs'), limitToLast(10)), (snap) => {
-    const list = document.getElementById('log-list');
-    list.innerHTML = "";
-    snap.forEach(child => {
-        const log = child.val();
-        const t = log.time ? new Date(log.time).toLocaleTimeString() : "";
-        list.innerHTML = `<li>[${t}] ${log.device} -> ${log.state}</li>` + list.innerHTML;
-    });
+// เช็คการเชื่อมต่อ
+onValue(ref(db, '.info/connected'), (snap) => {
+    document.getElementById('system-status').innerText = 
+        snap.val() ? "🟢 System Connected" : "🔴 Disconnected";
 });
-
-window.setTimer = function() {
-    const time = document.getElementById('input-time').value;
-    const id = selectRoom.value;
-    if(!time) return alert("Select Time!");
-    alert(`Timer set for ${id} at ${time}`);
-    setInterval(() => {
-        const now = new Date();
-        if(`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}` === time) {
-            set(ref(db, `building/lights/${id}`), true);
-        }
-    }, 60000);
-};
