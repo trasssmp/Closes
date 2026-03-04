@@ -3,58 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blueprint Smart Control</title>
+    <title>Advanced Building Blueprint</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="app-container">
         <header>
-            <h1>BUILDING BLUEPRINT</h1>
-            <p>Smart Lighting Control System</p>
+            <h1>MASTER BLUEPRINT CONTROL</h1>
+            <div class="status-bar">SYSTEM ONLINE | 8 TERMINALS ACTIVE</div>
         </header>
 
         <div class="main-layout">
             <section class="blueprint-section">
                 <div class="blueprint-card">
                     <div class="grid-overlay"></div>
-                    <div class="room room-1">
-                        <span class="room-label">ROOM 01 (Living)</span>
-                        <div class="light-node" id="node-room1"></div>
+                    
+                    <div class="room r-living">
+                        <span class="label">LIVING AREA</span>
+                        <div class="light-node" id="node-light1"></div>
                     </div>
-                    <div class="room room-2">
-                        <span class="room-label">ROOM 02 (Bedroom)</span>
-                        <div class="light-node" id="node-room2"></div>
+
+                    <div class="mid-section">
+                        <div class="room r-kitchen">
+                            <span class="label">KITCHEN</span>
+                            <div class="light-node" id="node-light2"></div>
+                        </div>
+                        <div class="room r-hallway">
+                            <span class="label">HALLWAY</span>
+                            <div class="light-node" id="node-light3"></div>
+                        </div>
+                    </div>
+
+                    <div class="right-section">
+                        <div class="room r-bed1">
+                            <span class="label">BEDROOM 01</span>
+                            <div class="light-node" id="node-light4"></div>
+                        </div>
+                        <div class="room r-bed2">
+                            <span class="label">BEDROOM 02</span>
+                            <div class="light-node" id="node-light5"></div>
+                        </div>
+                        <div class="room r-bath">
+                            <span class="label">BATH</span>
+                            <div class="light-node" id="node-light6"></div>
+                        </div>
+                    </div>
+
+                    <div class="room r-balcony">
+                        <span class="label">BALCONY</span>
+                        <div class="light-node" id="node-light7"></div>
+                        <div class="light-node" id="node-light8"></div>
                     </div>
                 </div>
             </section>
 
             <section class="control-section">
-                <div class="card">
-                    <h3>CONTROLS</h3>
-                    <div class="ctrl-row">
-                        <span>Room 01</span>
-                        <button class="btn-toggle" id="btn-room1" onclick="toggleLight('room1')">OFF</button>
-                    </div>
-                    <div class="ctrl-row">
-                        <span>Room 02</span>
-                        <button class="btn-toggle" id="btn-room2" onclick="toggleLight('room2')">OFF</button>
-                    </div>
+                <div class="card scroll-box">
+                    <h3>DEVICE CONTROLS</h3>
+                    <div id="control-list">
+                        </div>
                 </div>
 
                 <div class="card">
-                    <h3>SCHEDULE TIMER</h3>
+                    <h3>AUTOMATION</h3>
                     <div class="timer-input">
+                        <select id="schedule-room"></select>
                         <input type="time" id="schedule-time">
-                        <select id="schedule-room">
-                            <option value="room1">Room 01</option>
-                            <option value="room2">Room 02</option>
-                        </select>
                         <button class="btn-set" onclick="setTimer()">SET</button>
                     </div>
                 </div>
 
                 <div class="card history-card">
-                    <h3>HISTORY LOG</h3>
+                    <h3>LOGS</h3>
                     <ul id="history-list"></ul>
                 </div>
             </section>
